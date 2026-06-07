@@ -1,0 +1,13 @@
+{
+  "name": "firebase-template-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev":        "bun --hot run src/index.ts",
+    "start":      "bun run src/index.ts",
+    "type-check": "tsc --noEmit",
+    "lint":       "oxlint src/",
+    "lint:fix":   "oxlint src/ --fix",
+    "format":     "prettier --write \"src/**/*.ts\""
+  }
+}

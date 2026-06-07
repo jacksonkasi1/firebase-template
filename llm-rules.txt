@@ -1,0 +1,212 @@
+# LLM Rules — firebase-template
+
+This file defines the coding conventions for AI assistants (Claude, Gemini, GPT, etc.)
+working on this codebase. Follow ALL rules below without deviation.
+
+---
+
+## Project Structure Rules
+
+### Root Layout
+```
+firebase-template/
+├── web/firebase-template/   ← ALL frontend code
+├── server/                  ← ALL backend code
+├── docs/                    ← ALL documentation
+├── llm-rules.txt            ← This file
+└── README.md
+```
+
+### Never:
+- Put backend code (Firebase Admin, service accounts) in `web/`
+- Put frontend-only packages in `server/`
+- Create files outside this structure without updating ARCHITECTURE.md
+
+---
+
+## Import Rules
+
+### ALWAYS use the `@/` alias — never relative `../`
+
+```typescript
+// ✅ Correct
+import { useAuth } from "@/hooks/useAuth";
+
+// ❌ Wrong
+import { useAuth } from "../../hooks/useAuth";
+```
+
+### ALWAYS organize imports in exactly 3 groups:
+
+```typescript
+// Group 1: External npm packages
+import { useState } from "react";
+import { Hono } from "hono";
+
+// Group 2: Internal @/ alias imports (own code)
+import { Button } from "@/components/ui/button";
+import { ok } from "@/utils/response";
+
+// Group 3: Relative same-directory imports
+import type { Props } from "./types";
+```
+
+---
+
+## Server API Rules
+
+### One File = One API Endpoint (STRICT)
+
+Each route file handles exactly one HTTP method + path. Never put multiple APIs in one file.
+
+```
+✅ src/routes/todos/get-todos.ts     → GET /todos
+✅ src/routes/todos/create-todo.ts   → POST /todos
+✅ src/routes/todos/update-todo.ts   → PATCH /todos/:id
+✅ src/routes/todos/delete-todo.ts   → DELETE /todos/:id
+
+❌ src/routes/todos.ts               → Contains GET, POST, PATCH, DELETE (FORBIDDEN)
+```
+
+### Route File Template
+
+```typescript
+// VERB /path — one-line description
+// ───────────────────────────────────────────
+
+// ─── External ────────────────────────────────
+import { Hono } from "hono";
+
+// ─── Internal ────────────────────────────────
+import { adminDb } from "@/lib/firebase-admin";
+import { ok, fail } from "@/utils/response";
+import type { Variables } from "@/types";
+
+// ─────────────────────────────────────────────
+export const myRoute = new Hono<{ Variables: Variables }>().get("/", async (c) => {
+  // implementation
+});
+```
+
+### All Protected Routes Must:
+1. Use `authMiddleware` (already mounted in `routes/index.ts` per path)
+2. Check ownership before modifying any document
+3. Return standardized `ok()` or `fail()` responses
+
+---
+
+## Frontend Component Rules
+
+### All UI Must Be Built on shadcn/ui Primitives
+
+Never use raw `<button>`, `<input>`, `<select>` when a shadcn component exists.
+
+```tsx
+// ✅ Correct
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+// ❌ Wrong — raw HTML
+<button className="...">Submit</button>
+<input type="text" className="..." />
+```
+
+### IBM Carbon Design — Enforced Rules
+
+| Property | Value | Enforce |
+|---|---|---|
+| Border radius | `rounded-none` (0px) | All buttons, cards, inputs, dropdowns |
+| Primary color | `#0f62fe` (IBM Blue) | Links, primary CTAs, focus rings |
+| Font | IBM Plex Sans | All text |
+| Body letter-spacing | `tracking-[0.16px]` | All body text |
+| Display weight | `font-light` (300) | h1, h2 at large sizes |
+| Cards | `border border-border`, no shadow | All card surfaces |
+| Input focus | Bottom border 2px IBM Blue | All form inputs |
+
+### NEVER in IBM Carbon:
+- `rounded-md`, `rounded-lg`, `rounded-full` — FORBIDDEN
+- `shadow-*`, `drop-shadow-*` — FORBIDDEN
+- Colors outside the IBM token set — FORBIDDEN
+- `font-bold` on display headings — FORBIDDEN (use `font-light`)
+
+---
+
+## TypeScript Rules
+
+- **Strict mode** always on
+- **No `any`** — use `unknown` and narrow, or define the type
+- **Define types in `src/types/index.ts`** — not inline in components
+- **Zod schemas** for all external input (form data, API bodies)
+- **Type imports** with `import type` when only using type information
+
+---
+
+## Naming Conventions
+
+| Item | Convention | Example |
+|---|---|---|
+| Components | PascalCase | `LoginForm.tsx` |
+| Hooks | camelCase with `use` prefix | `useAuth.ts` |
+| API modules | camelCase with `.api` suffix | `todos.api.ts` |
+| Route files | kebab-case with verb prefix | `create-todo.ts` |
+| Types | PascalCase | `interface Todo` |
+| Store files | camelCase with `.store` suffix | `auth.store.ts` |
+| Utilities | camelCase | `validators.ts`, `response.ts` |
+
+---
+
+## Environment Variables
+
+### Frontend (Vite) — prefix with `VITE_`
+```
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+...
+VITE_SERVER_URL
+```
+
+### Server (Bun process.env)
+```
+FIREBASE_PROJECT_ID
+FIREBASE_PRIVATE_KEY
+...
+PORT
+FRONTEND_URL
+```
+
+**NEVER:**
+- Put server env variables in the frontend
+- Put Firebase Admin credentials in `web/`
+- Commit `.env` files (only `.env.example`)
+
+---
+
+## Adding Features Checklist
+
+When adding a new feature:
+- [ ] New server route → one file per endpoint in `src/routes/{module}/`
+- [ ] Register route in `src/routes/index.ts`
+- [ ] Add types in `src/types/index.ts`
+- [ ] Add Zod validator in `src/utils/validators.ts`
+- [ ] Frontend API module in `web/src/api/{module}.api.ts`
+- [ ] React hook in `web/src/hooks/use{Feature}.ts`
+- [ ] Components built on shadcn/ui with IBM Carbon styling
+- [ ] Update `docs/API.md` with new endpoints
+- [ ] Update Firestore rules if new collection
+
+---
+
+## Running Checks (Always pass before committing)
+
+```bash
+# Frontend
+cd web/firebase-template
+bun run typecheck
+bun run lint
+bun run build
+
+# Server
+cd server
+bun run type-check
+bun run lint
+```
