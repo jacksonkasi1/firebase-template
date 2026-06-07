@@ -12,10 +12,9 @@ import { fail } from "@/utils/response";
 import type { Variables } from "@/types";
 
 // ─────────────────────────────────────────────
-export const authMiddleware: MiddlewareHandler<{ Variables: Variables }> = async (
-  c,
-  next
-) => {
+export const authMiddleware: MiddlewareHandler<{
+  Variables: Variables;
+}> = async (c, next) => {
   const authorization = c.req.header("Authorization");
 
   if (!authorization?.startsWith("Bearer ")) {
@@ -27,8 +26,8 @@ export const authMiddleware: MiddlewareHandler<{ Variables: Variables }> = async
   try {
     const decoded = await adminAuth.verifyIdToken(idToken);
     c.set("user", {
-      uid:         decoded.uid,
-      email:       decoded.email,
+      uid: decoded.uid,
+      email: decoded.email,
       displayName: decoded.name,
     });
     await next();

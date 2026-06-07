@@ -19,11 +19,11 @@ const app = new Hono();
 app.use(
   "*",
   cors({
-    origin:          process.env.FRONTEND_URL ?? "http://localhost:5173",
-    allowMethods:    ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allowHeaders:    ["Content-Type", "Authorization"],
-    credentials:     true,
-  })
+    origin: process.env.FRONTEND_URL ?? "http://localhost:5173",
+    allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
 );
 
 app.use("*", logger());
@@ -31,11 +31,13 @@ app.use("*", prettyJSON());
 
 // ─── Health check ─────────────────────────────
 app.get("/", (c) =>
-  c.json(ok({ status: "running", version: "1.0.0" }, "Firebase Template Server"))
+  c.json(
+    ok({ status: "running", version: "1.0.0" }, "Firebase Template Server"),
+  ),
 );
 
 app.get("/health", (c) =>
-  c.json(ok({ status: "healthy", timestamp: new Date().toISOString() }))
+  c.json(ok({ status: "healthy", timestamp: new Date().toISOString() })),
 );
 
 // ─── API Routes ───────────────────────────────
@@ -43,23 +45,20 @@ app.route("/", routes);
 
 // ─── 404 handler ──────────────────────────────
 app.notFound((c) =>
-  c.json(fail("Route not found", `${c.req.method} ${c.req.url}`), 404)
+  c.json(fail("Route not found", `${c.req.method} ${c.req.url}`), 404),
 );
 
 // ─── Error handler ────────────────────────────
 app.onError((err, c) => {
   console.error("[Server Error]", err);
-  return c.json(
-    fail("Internal server error", err.message),
-    500
-  );
+  return c.json(fail("Internal server error", err.message), 500);
 });
 
 // ─── Start ────────────────────────────────────
 const PORT = parseInt(process.env.PORT ?? "3000", 10);
 
 export default {
-  port:  PORT,
+  port: PORT,
   fetch: app.fetch,
 };
 

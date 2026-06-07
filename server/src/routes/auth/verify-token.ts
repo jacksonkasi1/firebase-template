@@ -21,12 +21,12 @@ export const verifyTokenRoute = new Hono().post("/verify-token", async (c) => {
     return c.json(
       ok(
         {
-          uid:         decoded.uid,
-          email:       decoded.email,
+          uid: decoded.uid,
+          email: decoded.email,
           displayName: decoded.name,
         },
-        "Token verified"
-      )
+        "Token verified",
+      ),
     );
   } catch {
     return c.json(fail("Invalid or expired token"), 401);

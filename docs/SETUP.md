@@ -19,10 +19,10 @@ git clone https://github.com/YOUR_USERNAME/firebase-template.git
 cd firebase-template
 
 # Install frontend deps
-cd web/firebase-template && bun install
+cd web && bun install
 
 # Install server deps
-cd ../../server && bun install
+cd ../server && bun install
 ```
 
 ---
@@ -48,7 +48,7 @@ cd ../../server && bun install
 4. Copy the `firebaseConfig` object
 
 ```bash
-# In web/firebase-template/
+# In web/
 cp .env.example .env
 ```
 
@@ -111,7 +111,7 @@ firebase deploy --only firestore:rules
 
 ```bash
 # Terminal 1 — Frontend
-cd web/firebase-template
+cd web
 bun run dev        # http://localhost:5173
 
 # Terminal 2 — Server
@@ -137,7 +137,7 @@ Visit http://localhost:5173 — you should see the login page.
 
 | Problem | Fix |
 |---|---|
-| `Missing Firebase config` | Check `.env` values in `web/firebase-template/.env` |
+| `Missing Firebase config` | Check `.env` values in `web/.env` |
 | `401 Unauthorized` from server | Ensure `VITE_SERVER_URL` points to running server |
 | `Firebase Admin error` | Check `server/.env` private key (preserve `\n` escapes) |
 | `CORS error` | Ensure `FRONTEND_URL` in `server/.env` matches your frontend URL |

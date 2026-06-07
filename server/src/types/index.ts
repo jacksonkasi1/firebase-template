@@ -2,16 +2,16 @@
 // ─────────────────────────────────────
 
 export interface AuthUser {
-  uid:         string;
-  email:       string | undefined;
+  uid: string;
+  email: string | undefined;
   displayName: string | undefined;
 }
 
 export interface Todo {
-  id:        string;
-  title:     string;
+  id: string;
+  title: string;
   completed: boolean;
-  userId:    string;
+  userId: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -19,13 +19,13 @@ export interface Todo {
 export interface ApiSuccess<T = unknown> {
   success: true;
   message: string;
-  data:    T;
+  data: T;
 }
 
 export interface ApiError {
   success: false;
   message: string;
-  error?:  string;
+  error?: string;
 }
 
 export type ApiResponse<T = unknown> = ApiSuccess<T> | ApiError;

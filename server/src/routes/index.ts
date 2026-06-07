@@ -7,10 +7,10 @@ import { Hono } from "hono";
 
 // ─── Route modules ───────────────────────────
 import { verifyTokenRoute } from "@/routes/auth/verify-token";
-import { getTodosRoute }    from "@/routes/todos/get-todos";
-import { createTodoRoute }  from "@/routes/todos/create-todo";
-import { updateTodoRoute }  from "@/routes/todos/update-todo";
-import { deleteTodoRoute }  from "@/routes/todos/delete-todo";
+import { getTodosRoute } from "@/routes/todos/get-todos";
+import { createTodoRoute } from "@/routes/todos/create-todo";
+import { updateTodoRoute } from "@/routes/todos/update-todo";
+import { deleteTodoRoute } from "@/routes/todos/delete-todo";
 
 // ─── Middleware ───────────────────────────────
 import { authMiddleware } from "@/middleware/auth.middleware";
@@ -26,7 +26,7 @@ routes.route("/auth", verifyTokenRoute);
 
 // Protected routes (require valid Firebase ID token)
 routes.use("/todos/*", authMiddleware);
-routes.use("/todos",   authMiddleware);
+routes.use("/todos", authMiddleware);
 
 routes.route("/todos", getTodosRoute);
 routes.route("/todos", createTodoRoute);

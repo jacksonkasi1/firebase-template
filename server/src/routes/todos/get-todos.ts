@@ -30,9 +30,12 @@ export const getTodosRoute = new Hono<{ Variables: Variables }>().get(
       return c.json(ok(todos, "Todos fetched successfully"));
     } catch (err) {
       return c.json(
-        fail("Failed to fetch todos", err instanceof Error ? err.message : undefined),
-        500
+        fail(
+          "Failed to fetch todos",
+          err instanceof Error ? err.message : undefined,
+        ),
+        500,
       );
     }
-  }
+  },
 );

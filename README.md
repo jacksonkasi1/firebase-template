@@ -37,17 +37,17 @@ git clone https://github.com/YOUR_USERNAME/firebase-template.git
 cd firebase-template
 
 # Setup credentials (see docs/SETUP.md)
-cp web/firebase-template/.env.example web/firebase-template/.env
+cp web/.env.example web/.env
 cp server/.env.example server/.env
 # → Fill in Firebase credentials
 
 # Install
-cd web/firebase-template && bun install
-cd ../../server && bun install
+cd web && bun install
+cd ../server && bun install
 
 # Run
 # Terminal 1 — Frontend
-cd web/firebase-template && bun run dev
+cd web && bun run dev
 
 # Terminal 2 — Server
 cd server && bun run dev
@@ -57,11 +57,24 @@ Visit **http://localhost:5173**
 
 ---
 
+## Firestore Database Setup
+
+This project uses Cloud Firestore. Follow these simple steps to configure it:
+
+1. **Enable Firestore**: In your Firebase Console, click **Firestore Database** in the left sidebar and click **Create Database**.
+2. **Deploy Indexes & Rules**: Run these commands from the `server` directory to deploy the required composite indexes and security rules:
+   ```bash
+   bunx firebase login
+   bunx firebase deploy --only firestore
+   ```
+
+---
+
 ## Project Structure
 
 ```
 firebase-template/
-├── web/firebase-template/   ← Vite + React + shadcn/ui + IBM Carbon
+├── web/                     ← Vite + React + shadcn/ui + IBM Carbon
 ├── server/                  ← Bun + HonoJS + Firebase Admin SDK
 ├── docs/
 │   ├── SETUP.md             ← Getting Firebase credentials
@@ -99,6 +112,7 @@ firebase-template/
 ## Documentation
 
 - [Setup Guide](./docs/SETUP.md) — Firebase credentials, running locally
+- [Production Deployment Guide](./docs/PRODUCTION.md) — Production checklist, rules, indexes, custom domains
 - [Architecture](./docs/ARCHITECTURE.md) — System design and layer overview
 - [API Reference](./docs/API.md) — All server endpoints
 - [Firebase Rules](./docs/FIREBASE_RULES.md) — Security rules and deployment

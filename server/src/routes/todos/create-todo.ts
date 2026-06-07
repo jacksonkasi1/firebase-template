@@ -17,22 +17,22 @@ export const createTodoRoute = new Hono<{ Variables: Variables }>().post(
     const { uid } = c.get("user");
 
     // Parse & validate body
-    const body   = await c.req.json().catch(() => null);
+    const body = await c.req.json().catch(() => null);
     const parsed = createTodoSchema.safeParse(body);
 
     if (!parsed.success) {
       return c.json(
         fail("Validation error", parsed.error.issues[0]?.message),
-        400
+        400,
       );
     }
 
     try {
-      const now     = new Date().toISOString();
+      const now = new Date().toISOString();
       const docData = {
-        title:     parsed.data.title,
+        title: parsed.data.title,
         completed: false,
-        userId:    uid,
+        userId: uid,
         createdAt: now,
         updatedAt: now,
       };
@@ -43,9 +43,12 @@ export const createTodoRoute = new Hono<{ Variables: Variables }>().post(
       return c.json(ok(todo, "Todo created successfully"), 201);
     } catch (err) {
       return c.json(
-        fail("Failed to create todo", err instanceof Error ? err.message : undefined),
-        500
+        fail(
+          "Failed to create todo",
+          err instanceof Error ? err.message : undefined,
+        ),
+        500,
       );
     }
-  }
+  },
 );

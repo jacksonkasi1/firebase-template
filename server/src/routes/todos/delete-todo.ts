@@ -14,10 +14,10 @@ export const deleteTodoRoute = new Hono<{ Variables: Variables }>().delete(
   "/:id",
   async (c) => {
     const { uid } = c.get("user");
-    const id      = c.req.param("id");
+    const id = c.req.param("id");
 
     try {
-      const docRef  = adminDb.collection("todos").doc(id);
+      const docRef = adminDb.collection("todos").doc(id);
       const docSnap = await docRef.get();
 
       if (!docSnap.exists) {
@@ -36,9 +36,12 @@ export const deleteTodoRoute = new Hono<{ Variables: Variables }>().delete(
       return c.json(ok(null, "Todo deleted successfully"));
     } catch (err) {
       return c.json(
-        fail("Failed to delete todo", err instanceof Error ? err.message : undefined),
-        500
+        fail(
+          "Failed to delete todo",
+          err instanceof Error ? err.message : undefined,
+        ),
+        500,
       );
     }
-  }
+  },
 );
