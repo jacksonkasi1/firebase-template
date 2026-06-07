@@ -13,6 +13,7 @@ firebase-template/
 ├── web/firebase-template/   ← ALL frontend code
 ├── server/                  ← ALL backend code
 ├── docs/                    ← ALL documentation
+├── ibm-style-guide/         ← IBM Carbon design specifications & skill files
 ├── llm-rules.txt            ← This file
 └── README.md
 ```
