@@ -1,6 +1,6 @@
 # API Reference
 
-Base URL: `http://localhost:3000` (development)
+Base URL: `http://localhost:8080` (development)
 
 All protected routes require:
 ```

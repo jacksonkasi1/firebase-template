@@ -11,7 +11,7 @@ import { useAuthStore } from "@/store/auth.store"
 
 // ─────────────────────────────────────────────
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_URL ?? "http://localhost:3000",
+  baseURL: import.meta.env.VITE_SERVER_URL ?? "http://localhost:8080",
   timeout: 10_000,
   headers: {
     "Content-Type": "application/json",

@@ -61,7 +61,7 @@ VITE_FIREBASE_PROJECT_ID=your-project-id
 VITE_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
 VITE_FIREBASE_APP_ID=1:123456789:web:abc123
-VITE_SERVER_URL=http://localhost:3000
+VITE_SERVER_URL=http://localhost:8080
 ```
 
 ---
@@ -116,7 +116,7 @@ bun run dev        # http://localhost:5173
 
 # Terminal 2 — Server
 cd server
-bun run dev        # http://localhost:3000
+bun run dev        # http://localhost:8080
 ```
 
 Visit http://localhost:5173 — you should see the login page.

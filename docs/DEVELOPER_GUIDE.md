@@ -18,7 +18,7 @@ bun run format       # prettier --write
 
 ### Server (`server/`)
 ```bash
-bun run dev          # HonoJS with --hot reload (http://localhost:3000)
+bun run dev          # HonoJS with --hot reload (http://localhost:8080)
 bun run start        # Production start
 bun run type-check   # TypeScript check
 bun run lint         # oxlint src/
